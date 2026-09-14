@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>TaskFlow</title>
+<style>
+  body { font-family: system-ui, sans-serif; max-width: 420px; margin: 40px auto; }
+  h1 { font-size: 20px; }
+  .add-row { display: flex; gap: 8px; margin-bottom: 16px; }
+  .add-row input { flex: 1; padding: 6px; }
+  ul { list-style: none; padding: 0; }
+  li { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px solid #eee; }
+  li.done span { text-decoration: line-through; color: #888; }
+  li span { flex: 1; }
+  .tabs { display: flex; gap: 8px; margin-top: 16px; }
+  .tabs button { padding: 4px 10px; border: 1px solid #ccc; background: #f5f5f5; cursor: pointer; }
+  .tabs button[aria-selected="true"] { background: #333; color: white; }
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+  <h1>TaskFlow</h1>
+
+  <div class="add-row">
+    <input type="text" aria-label="New task" placeholder="New task">
+    <button aria-label="Add">Add</button>
+  </div>
+
+  <ul id="list"></ul>
+
+  <div class="tabs" role="tablist">
+    <button role="tab" aria-selected="true" data-filter="all">All</button>
+    <button role="tab" aria-selected="false" data-filter="active">Active</button>
+    <button role="tab" aria-selected="false" data-filter="completed">Completed</button>
+  </div>
+
+<script>
+  const DEFAULT_TASKS = [
+    { name: "Walk the dog", done: false },
+    { name: "Read a book", done: false },
+    { name: "Pay bills", done: false },
+  ];
+
+  function loadTasks() {
+    const raw = localStorage.getItem("taskflow_tasks");
+    return raw ? JSON.parse(raw) : structuredClone(DEFAULT_TASKS);
+  }
+
+  function saveTasks(tasks) {
+    localStorage.setItem("taskflow_tasks", JSON.stringify(tasks));
+  }
+
+  let tasks = loadTasks();
+  let filter = "all";
+
+  function render() {
+    const list = document.getElementById("list");
+    list.innerHTML = "";
+    const visible = tasks.filter(t =>
+      filter === "all" ? true : filter === "active" ? !t.done : t.done
+    );
+    for (const t of visible) {
+      const li = document.createElement("li");
+      if (t.done) li.classList.add("done");
+
+      const cb = document.createElement("input");
+      cb.type = "checkbox";
+      cb.checked = t.done;
+      cb.setAttribute("aria-label", t.name);
+      cb.addEventListener("change", () => {
+        t.done = cb.checked;
+        saveTasks(tasks);
+        render();
+      });
+
+      const span = document.createElement("span");
+      span.textContent = t.name;
+
+      const del = document.createElement("button");
+      del.textContent = "✕";
+      del.setAttribute("aria-label", "Delete " + t.name);
+      del.addEventListener("click", () => {
+        tasks = tasks.filter(x => x !== t);
+        saveTasks(tasks);
+        render();
+      });
+
+      li.append(cb, span, del);
+      list.appendChild(li);
+    }
+  }
+
+  document.querySelector('.add-row button').addEventListener("click", () => {
+    const input = document.querySelector('.add-row input');
+    const name = input.value.trim();
+    if (!name) return;
+    tasks.push({ name, done: false });
+    saveTasks(tasks);
+    input.value = "";
+    render();
+  });
+
+  for (const tab of document.querySelectorAll('[role="tab"]')) {
+    tab.addEventListener("click", () => {
+      for (const t of document.querySelectorAll('[role="tab"]')) {
+        t.setAttribute("aria-selected", "false");
+      }
+      tab.setAttribute("aria-selected", "true");
+      filter = tab.dataset.filter;
+      render();
+    });
+  }
+
+  render();
+</script>
+</body>
+</html>

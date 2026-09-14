@@ -1,0 +1,7 @@
+.env
+.claude/
+__pycache__/
+*.pyc
+.venv/
+venv/
+tasks_eval/reports/results.csv

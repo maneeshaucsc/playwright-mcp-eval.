@@ -1,0 +1,10 @@
+{"id": "t01", "task": "Add a new task called 'Buy milk'.", "min_steps": 2}
+{"id": "t02", "task": "Mark 'Read a book' as complete.", "min_steps": 1}
+{"id": "t03", "task": "Delete the task 'Pay bills'.", "min_steps": 1}
+{"id": "t04", "task": "Add a task called 'Call mom' and then mark it as complete.", "min_steps": 3}
+{"id": "t05", "task": "Mark both 'Walk the dog' and 'Read a book' as complete.", "min_steps": 2}
+{"id": "t06", "task": "Switch the task list to show only Active tasks.", "min_steps": 1}
+{"id": "t07", "task": "Complete the 'Walk the dog' task, then switch the view to show only Completed tasks.", "min_steps": 2}
+{"id": "t08", "task": "Delete all three tasks currently in the list.", "min_steps": 3}
+{"id": "t09", "task": "Add two new tasks: 'Task A' and 'Task B'.", "min_steps": 4}
+{"id": "t10", "task": "Mark the task called 'Water the plants' as complete.", "min_steps": 0}
