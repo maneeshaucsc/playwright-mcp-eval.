@@ -4,4 +4,6 @@ __pycache__/
 *.pyc
 .venv/
 venv/
+.playwright-mcp/
 tasks_eval/reports/results.csv
+tasks_eval/reports/results_mcp.csv

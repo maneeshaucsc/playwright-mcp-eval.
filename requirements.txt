@@ -5,3 +5,7 @@ pandas>=2.0
 matplotlib>=3.8
 tabulate>=0.9
 python-dotenv>=1.0
+mcp>=2.0
+
+# Also requires Node.js (npx) on PATH -- the Playwright MCP server
+# (@playwright/mcp) is an npm package, launched automatically via npx.
